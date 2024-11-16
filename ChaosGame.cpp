@@ -26,7 +26,7 @@ int main()
 	vector<Vector2f> vertices;
 	vector<Vector2f> points;
 	
-	bool hasClicked = false;
+	int unsigned timesClicked = 0;
 
 
 	sf::Text text;
@@ -61,16 +61,17 @@ int main()
 			    std::cout << "mouse x: " << event.mouseButton.x << std::endl;
 			    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
 
-				hasClicked = true;
-	
+				timesClicked++;
+
 			    if(vertices.size() < 3)
 			    {
-				vertices.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
+					vertices.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
 			    }
 			    else if(points.size() == 0)
 			    {
 				///fourth click
 				///push back to points vector
+					points.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
 			    }
 			}
 		    }
@@ -102,7 +103,11 @@ int main()
 		****************************************
 		*/
 		window.clear();
-		if (!hasClicked) {
+		if (timesClicked == 0 || timesClicked == 3) {
+			if (timesClicked == 2)
+			{
+				text.setString("Click on a fourth point to start the algorithm");
+			}
 			window.draw(text);
 		}
 	
