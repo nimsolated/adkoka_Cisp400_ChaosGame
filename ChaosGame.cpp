@@ -34,7 +34,7 @@ int main()
 
 	sf::Text shapePrompt;
 	shapePrompt.setFont(font);
-	shapePrompt.setString("Press T for Triangle\nor P for Pentagon");
+	shapePrompt.setString("Press <T> for Triangle\nor <P> for Pentagon");
 	shapePrompt.setCharacterSize(48);
 	shapePrompt.setFillColor(sf::Color::Cyan);
 	shapePrompt.setStyle(sf::Text::Regular);
