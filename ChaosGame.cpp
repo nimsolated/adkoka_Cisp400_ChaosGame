@@ -50,25 +50,23 @@ int main()
 		    }
 		    if (event.type == sf::Event::MouseButtonPressed)
 		    {
-			if (event.mouseButton.button == sf::Mouse::Left)
-			{
-			    std::cout << "the left button was pressed" << std::endl;
-			    std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-			    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+				if (event.mouseButton.button == sf::Mouse::Left)
+				{
+					std::cout << "the left button was pressed" << std::endl;
+					std::cout << "mouse x: " << event.mouseButton.x << std::endl;
+					std::cout << "mouse y: " << event.mouseButton.y << std::endl;
 	
-			    if(vertices.size() < 3)
-			    {
-				vertices.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
-			    }
-			    else if(points.size() == 0)
-			    {
-				///fourth click
-				///push back to points vector
-			    }
-			}
+					if(vertices.size() < 3)
+					{
+					vertices.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
+					}
+					else if(points.size() == 0)
+					{
+					///fourth click
+					///push back to points vector
+					}
+				}
 		    }
-
-			window.draw(text);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
@@ -94,6 +92,7 @@ int main()
 		****************************************
 		*/
 		window.clear();
+		window.draw(text);
 		for(int i = 0; i < vertices.size(); i++)
 		{
 		    RectangleShape rect(Vector2f(10,10));
