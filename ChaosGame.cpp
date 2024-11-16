@@ -28,14 +28,13 @@ int main()
 	
 	int unsigned timesClicked = 0;
 
-
 	sf::Text text;
 	text.setFont(font);
-	text.setString("Create your vertices by\nclicking three points in this\nwindows");
+	text.setString("Create your vertices by clicking \n three points in this windows");
 	text.setCharacterSize(60);
 	text.setFillColor(sf::Color::Blue);
 	text.setStyle(sf::Text::Bold);
-	text.setPosition((1080/2)-300, (1080/2)-60);
+	text.setPosition(120, 60);
 
 
 	while (window.isOpen())
@@ -119,17 +118,17 @@ int main()
 
 		for(int i = 0; i < vertices.size(); i++)
 		{
-		    RectangleShape rect(Vector2f(10,10));
+		    RectangleShape rect(Vector2f(5,5));
 		    rect.setPosition(Vector2f(vertices[i].x, vertices[i].y));
-		    rect.setFillColor(Color::Blue);
+		    rect.setFillColor(Color::White);
 		    window.draw(rect);
 		}
 
 		for (int i = 0; i < points.size(); i++)
 		{
-			RectangleShape dot(Vector2f(4, 4));
+			RectangleShape dot(Vector2f(1, 1));
 			dot.setPosition(Vector2f(points[i].x, points[i].y));
-			dot.setFillColor(Color::Blue);
+			dot.setFillColor(Color::White);
 			window.draw(dot);
 		}
 
