@@ -16,6 +16,20 @@ int main()
 	// Create and open a window for the game
 	RenderWindow window(vm, "Chaos Game!!", Style::Default);
 	
+	Font font;
+
+	if (!font.loadFromFile("SuperShiny-0v0rG.ttf"))
+	{
+		return -1;
+	}
+
+	Text text;
+	text.setFont(font);
+	text.setString("Hello World!");
+	text.setCharacterSize(24);
+	text.setFillColor(Color::Red);
+	text.setStyle(Text::Bold | Text::Underlined);
+
 	vector<Vector2f> vertices;
 	vector<Vector2f> points;
 
@@ -53,6 +67,8 @@ int main()
 			    }
 			}
 		    }
+
+			window.draw(text);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
