@@ -4,7 +4,7 @@ SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 LDFLAGS := -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 CXXFLAGS := -g -Wall -fpermissive -std=c++17
-TARGET := MakefileTutorial.out
+TARGET := MakefileOutput.out
 
 $(TARGET): $(OBJ_FILES)
 	g++ -o $@ $^ $(LDFLAGS)
