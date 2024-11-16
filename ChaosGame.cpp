@@ -26,7 +26,7 @@ int main()
 	vector<Vector2f> vertices;
 	vector<Vector2f> points;
 	
-	bool hasClicked = false;
+	unsigned int timesClicked = 0;
 
 
 	sf::Text text;
@@ -61,7 +61,7 @@ int main()
 			    std::cout << "mouse x: " << event.mouseButton.x << std::endl;
 			    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
 
-				hasClicked = true;
+				timesClicked++;
 	
 			    if(vertices.size() < 3)
 			    {
@@ -103,7 +103,7 @@ int main()
 		*/
 		window.clear();
 		if (!hasClicked) {
-			window.draw(text);
+			
 		}
 	
 
