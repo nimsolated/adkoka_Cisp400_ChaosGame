@@ -74,8 +74,6 @@ int main()
 			    }
 			}
 		    }
-
-			window.draw(text);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
