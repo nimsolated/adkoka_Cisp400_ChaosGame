@@ -33,8 +33,8 @@ int main()
 	text.setFont(font);
 	text.setString("Create your vertices by\nclicking three points in this\nwindows");
 	text.setCharacterSize(60);
-	text.setFillColor(sf::Color::Red);
-	text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+	text.setFillColor(sf::Color::Blue);
+	text.setStyle(sf::Text::Bold);
 	text.setPosition((1920/2)-300, (1080/2)-60);
 
 
