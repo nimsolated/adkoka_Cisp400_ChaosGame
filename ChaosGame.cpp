@@ -12,7 +12,7 @@ using namespace std;
 int main()
 {
 	// Create a video mode object
-	VideoMode vm(1920, 1080);
+	VideoMode vm(1080, 1080);
 	// Create and open a window for the game
 	RenderWindow window(vm, "Chaos Game!!", Style::Default);
 	
@@ -35,7 +35,7 @@ int main()
 	text.setCharacterSize(60);
 	text.setFillColor(sf::Color::Blue);
 	text.setStyle(sf::Text::Bold);
-	text.setPosition((1920/2)-300, (1080/2)-60);
+	text.setPosition((1080/2)-300, (1080/2)-60);
 
 
 	while (window.isOpen())
@@ -89,9 +89,14 @@ int main()
 		if(points.size() > 0)
 		{
 		    ///generate more point(s)
+			Vector2f new_point = Vector2f(0.0, 0.0);
 		    ///select random vertex
+			Vector2f rand_vertex = vertices.at(rand() % 3);
 		    ///calculate midpoint between random vertex and the last point in the vector
+			new_point.x = (points.back().x + rand_vertex.x) / 2;
+			new_point.y = (points.back().y + rand_vertex.y) / 2;
 		    ///push back the newly generated coord.
+			points.push_back(new_point);
 		}
 	
 
@@ -114,7 +119,7 @@ int main()
 
 		for(int i = 0; i < vertices.size(); i++)
 		{
-		    RectangleShape rect(Vector2f(5,5));
+		    RectangleShape rect(Vector2f(10,10));
 		    rect.setPosition(Vector2f(vertices[i].x, vertices[i].y));
 		    rect.setFillColor(Color::Blue);
 		    window.draw(rect);
@@ -122,7 +127,7 @@ int main()
 
 		for (int i = 0; i < points.size(); i++)
 		{
-			RectangleShape dot(Vector2f(2, 2));
+			RectangleShape dot(Vector2f(4, 4));
 			dot.setPosition(Vector2f(points[i].x, points[i].y));
 			dot.setFillColor(Color::Blue);
 			window.draw(dot);
