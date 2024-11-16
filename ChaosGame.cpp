@@ -99,19 +99,19 @@ int main()
         if (points.size() > 0)
         {
             /// Generate more point(s)
-            Vector2f new_point = Vector2f(0.0, 0.0);
+            Vector2f new_point = Vector2f();
             /// Select random vertex
             Vector2f rand_vertex = vertices.at(rand() % 5);
             /// Calculate midpoint between random vertex and the last point in the vector
-            new_point.x = (points.back().x + rand_vertex.x)  * 0.3;
-            new_point.y = (points.back().y + rand_vertex.y) * 0.3;
+            new_point.x = rand_vertex.x + ((points.back().x - rand_vertex.x) * 0.3819);
+            new_point.y = rand_vertex.y + ((points.back().y - rand_vertex.y) * 0.3819);
             /// Push back the newly generated coord.
             points.push_back(new_point);
         }
 
         
 
-        /*
+        /*  
         ****************************************
         Draw
         ****************************************
