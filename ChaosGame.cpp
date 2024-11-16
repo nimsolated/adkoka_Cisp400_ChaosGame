@@ -23,15 +23,20 @@ int main()
 		return -1;
 	}
 
-	Text text;
-	text.setFont(font);
-	text.setString("Hello World!");
-	text.setCharacterSize(24);
-	text.setFillColor(Color::Red);
-	text.setStyle(Text::Bold | Text::Underlined);
-
 	vector<Vector2f> vertices;
 	vector<Vector2f> points;
+	
+	bool hasClicked = false;
+
+
+	sf::Text text;
+	text.setFont(font);
+	text.setString("Create your vertices by\nclicking three points in this\nwindows");
+	text.setCharacterSize(60);
+	text.setFillColor(sf::Color::Red);
+	text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+	text.setPosition((1920/2)-300, (1080/2)-60);
+
 
 	while (window.isOpen())
 	{
@@ -50,22 +55,24 @@ int main()
 		    }
 		    if (event.type == sf::Event::MouseButtonPressed)
 		    {
-				if (event.mouseButton.button == sf::Mouse::Left)
-				{
-					std::cout << "the left button was pressed" << std::endl;
-					std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-					std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+			if (event.mouseButton.button == sf::Mouse::Left)
+			{
+			    std::cout << "the left button was pressed" << std::endl;
+			    std::cout << "mouse x: " << event.mouseButton.x << std::endl;
+			    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+
+				hasClicked = true;
 	
-					if(vertices.size() < 3)
-					{
-					vertices.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
-					}
-					else if(points.size() == 0)
-					{
-					///fourth click
-					///push back to points vector
-					}
-				}
+			    if(vertices.size() < 3)
+			    {
+				vertices.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
+			    }
+			    else if(points.size() == 0)
+			    {
+				///fourth click
+				///push back to points vector
+			    }
+			}
 		    }
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
@@ -86,13 +93,20 @@ int main()
 		    ///push back the newly generated coord.
 		}
 	
+
+		
+
 		/*
 		****************************************
 		Draw
 		****************************************
 		*/
 		window.clear();
-		window.draw(text);
+		if (!hasClicked) {
+			window.draw(text);
+		}
+	
+
 		for(int i = 0; i < vertices.size(); i++)
 		{
 		    RectangleShape rect(Vector2f(10,10));
