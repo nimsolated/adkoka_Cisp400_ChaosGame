@@ -18,6 +18,23 @@ int main()
 	
 	vector<Vector2f> vertices;
 	vector<Vector2f> points;
+	
+	bool hasClicked = false;
+
+	sf::Font font;
+	if (!font.loadFromFile("SuperShiny-0v0rG.ttf"))
+	{
+		// error...
+	}
+
+	sf::Text text;
+	text.setFont(font);
+	text.setString("Hello world");
+	text.setCharacterSize(120);
+	text.setFillColor(sf::Color::Red);
+	text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+	text.setPosition((1920/2)-300, (1080/2)-60);
+
 
 	while (window.isOpen())
 	{
@@ -41,6 +58,8 @@ int main()
 			    std::cout << "the left button was pressed" << std::endl;
 			    std::cout << "mouse x: " << event.mouseButton.x << std::endl;
 			    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+
+				hasClicked = true;
 	
 			    if(vertices.size() < 3)
 			    {
@@ -72,12 +91,20 @@ int main()
 		    ///push back the newly generated coord.
 		}
 	
+
+		
+
 		/*
 		****************************************
 		Draw
 		****************************************
 		*/
 		window.clear();
+		if (!hasClicked) {
+			window.draw(text);
+		}
+	
+
 		for(int i = 0; i < vertices.size(); i++)
 		{
 		    RectangleShape rect(Vector2f(10,10));
