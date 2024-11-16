@@ -12,7 +12,7 @@ using namespace std;
 int main()
 {
 	// Create a video mode object
-	VideoMode vm(1920, 1080);
+	VideoMode vm(1080, 1080);
 	// Create and open a window for the game
 	RenderWindow window(vm, "Chaos Game!!", Style::Default);
 	
@@ -35,7 +35,7 @@ int main()
 	text.setCharacterSize(60);
 	text.setFillColor(sf::Color::Blue);
 	text.setStyle(sf::Text::Bold);
-	text.setPosition((1920/2)-300, (1080/2)-60);
+	text.setPosition((1920/2)-800, (1080/2)-60);
 
 
 	while (window.isOpen())
