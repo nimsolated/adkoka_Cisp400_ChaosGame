@@ -30,11 +30,19 @@ int main()
 
 	sf::Text text;
 	text.setFont(font);
-	text.setString("Create your vertices by clicking \n three points in this windows");
-	text.setCharacterSize(60);
-	text.setFillColor(sf::Color::Blue);
+	text.setString("Create your vertices by clicking\nthree points in this windows");
+	text.setCharacterSize(48);
+	text.setFillColor(sf::Color::Cyan);
 	text.setStyle(sf::Text::Bold);
 	text.setPosition(120, 60);
+
+	sf::Text iterText;
+	iterText.setFont(font);
+	iterText.setString(to_string(points.size()));
+	iterText.setCharacterSize(32);
+	iterText.setFillColor(sf::Color::Cyan);
+	iterText.setStyle(sf::Text::Regular);
+	iterText.setPosition(32, 48);
 
 
 	while (window.isOpen())
@@ -61,6 +69,11 @@ int main()
 			    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
 
 				timesClicked++;
+
+				if (timesClicked == 3)
+				{
+					text.setString("Click on a fourth point\nto start the algorithm");
+				}
 
 			    if(vertices.size() < 3)
 			    {
@@ -108,13 +121,14 @@ int main()
 		*/
 		window.clear();
 		if (timesClicked == 0 || timesClicked == 3) {
-			if (timesClicked == 2)
-			{
-				text.setString("Click on a fourth point to start the algorithm");
-			}
+			
 			window.draw(text);
 		}
-	
+		else if (timesClicked > 3)
+		{
+			iterText.setString(to_string(points.size()));
+			window.draw(iterText);
+		}
 
 		for(int i = 0; i < vertices.size(); i++)
 		{
