@@ -23,28 +23,16 @@ int main()
 		return -1;
 	}
 
-	Text text;
-	text.setFont(font);
-	text.setString("Hello World!");
-	text.setCharacterSize(24);
-	text.setFillColor(Color::Red);
-	text.setStyle(Text::Bold | Text::Underlined);
-
 	vector<Vector2f> vertices;
 	vector<Vector2f> points;
 	
 	bool hasClicked = false;
 
-	sf::Font font;
-	if (!font.loadFromFile("SuperShiny-0v0rG.ttf"))
-	{
-		// error...
-	}
 
 	sf::Text text;
 	text.setFont(font);
-	text.setString("Hello world");
-	text.setCharacterSize(120);
+	text.setString("Create your vertices by\nclicking three points in this\nwindows");
+	text.setCharacterSize(60);
 	text.setFillColor(sf::Color::Red);
 	text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 	text.setPosition((1920/2)-300, (1080/2)-60);
