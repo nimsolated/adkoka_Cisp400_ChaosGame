@@ -81,11 +81,11 @@ int main()
 
 	sf::Text verticesPrompt;
 	verticesPrompt.setFont(font);
-	verticesPrompt.setString("Number of Vertices:\nPress a number\nin range 3 to 9\nBy Armin and Daniel");
+	verticesPrompt.setString("Number of Vertices:\nPress a number\nin range 3 to 9\n\nBy Armin and Daniel");
 	verticesPrompt.setCharacterSize(36);
 	verticesPrompt.setFillColor(sf::Color::Cyan);
 	verticesPrompt.setStyle(sf::Text::Regular);
-	verticesPrompt.setPosition(54, 54);
+	verticesPrompt.setPosition(27, 27);
 
 	sf::Text text;
 	text.setFont(font);
@@ -162,7 +162,7 @@ int main()
 	// Create a video mode object
 	VideoMode vm2(1080, 1080);
 	// Create and open a window for the game
-	RenderWindow window(vm2, "Chaos Game!!", Style::Default);
+	RenderWindow window(vm2, "Chaos Game!! - By Armin and Daniel", Style::Default);
 
 	while (window.isOpen())
 	{
