@@ -9,14 +9,32 @@
 using namespace sf;
 using namespace std;
 
+bool inputVerticesIsInRange()
+{
+	return (
+		Keyboard::isKeyPressed(Keyboard::Num3) ||
+		Keyboard::isKeyPressed(Keyboard::Num4) ||
+		Keyboard::isKeyPressed(Keyboard::Num5) ||
+		Keyboard::isKeyPressed(Keyboard::Num6) ||
+		Keyboard::isKeyPressed(Keyboard::Num7) ||
+		Keyboard::isKeyPressed(Keyboard::Num8) ||
+		Keyboard::isKeyPressed(Keyboard::Num9) ||
+		Keyboard::isKeyPressed(Keyboard::Numpad3) ||
+		Keyboard::isKeyPressed(Keyboard::Numpad4) ||
+		Keyboard::isKeyPressed(Keyboard::Numpad5) ||
+		Keyboard::isKeyPressed(Keyboard::Numpad6) ||
+		Keyboard::isKeyPressed(Keyboard::Numpad7) ||
+		Keyboard::isKeyPressed(Keyboard::Numpad8) ||
+		Keyboard::isKeyPressed(Keyboard::Numpad9)
+		);
+}
+
 int main()
 {
 	// Create a video mode object
-	VideoMode vm(1080, 1080);
-	VideoMode vm2(540, 270);
+	VideoMode vm1(540, 270);
 	// Create and open a window for the game
-	RenderWindow window(vm, "Chaos Game!!", Style::Default);
-	RenderWindow shapePromptWindow(vm2, "2nd window", Style::Default);
+	RenderWindow verticesPromptWindow(vm1, "Vertices Prompt", Style::Default);
 	
 	Font font;
 
@@ -32,13 +50,13 @@ int main()
 
 	int unsigned numVertices = 0;
 
-	sf::Text shapePrompt;
-	shapePrompt.setFont(font);
-	shapePrompt.setString("Press <T> for Triangle\nor <P> for Pentagon");
-	shapePrompt.setCharacterSize(48);
-	shapePrompt.setFillColor(sf::Color::Cyan);
-	shapePrompt.setStyle(sf::Text::Regular);
-	shapePrompt.setPosition(54, 54);
+	sf::Text verticesPrompt;
+	verticesPrompt.setFont(font);
+	verticesPrompt.setString("Number of Vertices:\nPress a number\nin range 3 to 9");
+	verticesPrompt.setCharacterSize(48);
+	verticesPrompt.setFillColor(sf::Color::Cyan);
+	verticesPrompt.setStyle(sf::Text::Regular);
+	verticesPrompt.setPosition(54, 54);
 
 	sf::Text text;
 	text.setFont(font);
@@ -55,38 +73,65 @@ int main()
 	iterText.setStyle(sf::Text::Regular);
 	iterText.setPosition(32, 48);
 
-	while (shapePromptWindow.isOpen())
+	cout << "Num3: " << Keyboard::Num3 << endl;
+	cout << "Num9: " << Keyboard::Num9 << endl;
+	cout << "Numpad3: " << Keyboard::Numpad3 << endl;
+	cout << "Numpad9: " << Keyboard::Numpad9 << endl;
+	cout << "Num3 - 26: " << Keyboard::Num3 - 26 << endl;
+	cout << "Num9 - 26: " << Keyboard::Num9 - 26 << endl;
+	cout << "Numpad3 - 75: " << Keyboard::Numpad3 - 75 << endl;
+	cout << "Numpad9 - 75: " << Keyboard::Numpad9 - 75 << endl;
+
+	while (verticesPromptWindow.isOpen())
 	{
 		// Handle input
 		Event event;
-		while (window.pollEvent(event))
+		while (verticesPromptWindow.pollEvent(event))
 		{
 			if (event.type == Event::Closed)
 			{
-				shapePromptWindow.close();
+				verticesPromptWindow.close();
+			}
+
+			if (event.type == Event::KeyPressed)
+			{
+				cout << "Key Pressed: " << event.key.code << endl;
+
+				if (inputVerticesIsInRange())
+				{
+					// Assign numVertices based on which number key was pressed
+					int key = event.key.code;
+					if (key >= 29 && key <= 35) // if pressed Num3-Num9
+					{
+						numVertices = event.key.code - 26;
+					}
+					else if (key >= 78 && key <= 84) // if pressed Numpad3-Numpad9
+					{
+						numVertices = event.key.code - 75;
+					}
+					
+					cout << numVertices << endl;
+
+					text.setString("Create your vertices by clicking\n" + to_string(numVertices) + " points in this windows");
+					verticesPromptWindow.close();
+				}
 			}
 		}
-		if (Keyboard::isKeyPressed(Keyboard::T))
-		{
-			numVertices = 3;
-			text.setString("Create your vertices by clicking\nthree points in this windows");
-			shapePromptWindow.close();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::P))
-		{
-			numVertices = 5;
-			text.setString("Create your vertices by clicking\nfive points in this windows");
-			shapePromptWindow.close();
-		}
+		
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
-			shapePromptWindow.close();
+			verticesPromptWindow.close();
 		}
 
 		// Draw
-		shapePromptWindow.draw(shapePrompt);
-		shapePromptWindow.display();
+		verticesPromptWindow.draw(verticesPrompt);
+		verticesPromptWindow.display();
 	}
+
+	// Create a video mode object
+	VideoMode vm2(1080, 1080);
+	// Create and open a window for the game
+	RenderWindow window(vm2, "Chaos Game!!", Style::Default);
 
 	while (window.isOpen())
 	{
@@ -115,14 +160,7 @@ int main()
 
 					if (timesClicked == numVertices)
 					{
-						if (numVertices == 3)
-						{
-							text.setString("Click on a fourth point\nto start the algorithm");
-						}
-						else if (numVertices == 5)
-						{
-							text.setString("Click on a sixth point\nto start the algorithm");
-						}
+						text.setString("Click on a " + to_string(numVertices + 1) + "th point\nto start the algorithm");
 					}
 
 					if(vertices.size() < numVertices)
@@ -155,8 +193,8 @@ int main()
 		    ///select random vertex
 			Vector2f rand_vertex = vertices.at(rand() % numVertices);
 		    ///calculate midpoint between random vertex and the last point in the vector
-			new_point.x = (points.back().x + rand_vertex.x) / 2;
-			new_point.y = (points.back().y + rand_vertex.y) / 2;
+			new_point.x = (points.back().x + rand_vertex.x) * 0.5;
+			new_point.y = (points.back().y + rand_vertex.y) * 0.5;
 		    ///push back the newly generated coord.
 			points.push_back(new_point);
 		}
