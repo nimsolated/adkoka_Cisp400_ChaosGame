@@ -81,8 +81,8 @@ int main()
 
 	sf::Text verticesPrompt;
 	verticesPrompt.setFont(font);
-	verticesPrompt.setString("Number of Vertices:\nPress a number\nin range 3 to 9");
-	verticesPrompt.setCharacterSize(48);
+	verticesPrompt.setString("Number of Vertices:\nPress a number\nin range 3 to 9\nBy Armin and Daniel");
+	verticesPrompt.setCharacterSize(36);
 	verticesPrompt.setFillColor(sf::Color::Cyan);
 	verticesPrompt.setStyle(sf::Text::Regular);
 	verticesPrompt.setPosition(54, 54);
@@ -222,7 +222,7 @@ int main()
 			/// Generate more point(s)
 			Vector2f new_point = Vector2f();
 			/// Select random vertex
-			Vector2f rand_vertex = vertices.at(rand() % 5);
+			Vector2f rand_vertex = vertices.at(rand() % numVertices);
 			/// Calculate midpoint between random vertex and the last point in the vector
 			new_point.x = rand_vertex.x + ((points.back().x - rand_vertex.x) * ratio);
 			new_point.y = rand_vertex.y + ((points.back().y - rand_vertex.y) * ratio);
