@@ -29,6 +29,35 @@ bool inputVerticesIsInRange()
 		);
 }
 
+double getRatio(int n)
+{
+	switch (n)
+	{
+	case 3:
+	case 4:
+		return 0.5;
+		break;
+	case 5:
+		return 0.381966;
+		break;
+	case 6:
+		return 0.333333;
+		break;
+	case 7:
+		return 0.307979;
+		break;
+	case 8:
+		return 0.292893;
+		break;
+	case 9:
+		return 0.257773;
+		break;
+	default:
+		return 0.5;
+		break;
+	}
+}
+
 int main()
 {
 	// Create a video mode object
@@ -47,8 +76,8 @@ int main()
 	vector<Vector2f> points;
 	
 	int unsigned timesClicked = 0;
-
 	int unsigned numVertices = 0;
+	double ratio = 0.0;
 
 	sf::Text verticesPrompt;
 	verticesPrompt.setFont(font);
@@ -103,14 +132,14 @@ int main()
 					int key = event.key.code;
 					if (key >= 29 && key <= 35) // if pressed Num3-Num9
 					{
-						numVertices = event.key.code - 26;
+						numVertices = event.key.code - 26; // Offsets the keycode to get the correct number of Vertices
 					}
 					else if (key >= 78 && key <= 84) // if pressed Numpad3-Numpad9
 					{
-						numVertices = event.key.code - 75;
+						numVertices = event.key.code - 75; // Offsets the keycode to get the correct number of Vertices
 					}
 					
-					cout << numVertices << endl;
+					ratio = getRatio(numVertices); // Assign ratio based on number of Vertices
 
 					text.setString("Create your vertices by clicking\n" + to_string(numVertices) + " points in this windows");
 					verticesPromptWindow.close();
@@ -193,8 +222,8 @@ int main()
 		    ///select random vertex
 			Vector2f rand_vertex = vertices.at(rand() % numVertices);
 		    ///calculate midpoint between random vertex and the last point in the vector
-			new_point.x = (points.back().x + rand_vertex.x) * 0.5;
-			new_point.y = (points.back().y + rand_vertex.y) * 0.5;
+			new_point.x = (points.back().x + rand_vertex.x) * ratio;
+			new_point.y = (points.back().y + rand_vertex.y) * ratio;
 		    ///push back the newly generated coord.
 			points.push_back(new_point);
 		}
