@@ -222,8 +222,8 @@ int main()
 			/// Select random vertex
 			Vector2f rand_vertex = vertices.at(rand() % 5);
 			/// Calculate midpoint between random vertex and the last point in the vector
-			new_point.x = rand_vertex.x + ((points.back().x - rand_vertex.x) * 0.3819);
-			new_point.y = rand_vertex.y + ((points.back().y - rand_vertex.y) * 0.3819);
+			new_point.x = rand_vertex.x + ((points.back().x - rand_vertex.x) * ratio);
+			new_point.y = rand_vertex.y + ((points.back().y - rand_vertex.y) * ratio);
 			/// Push back the newly generated coord.
 			points.push_back(new_point);
 		}
