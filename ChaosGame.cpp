@@ -62,7 +62,7 @@ int main()
 {
 	// Create a video mode object
 	VideoMode vm1(540, 270);
-	// Create and open a window for the game
+	// Create and open a window for the vertices prompt window
 	RenderWindow verticesPromptWindow(vm1, "Vertices Prompt", Style::Default);
 	
 	Font font;
@@ -102,6 +102,7 @@ int main()
 	iterText.setStyle(sf::Text::Regular);
 	iterText.setPosition(32, 48);
 
+	/*
 	cout << "Num3: " << Keyboard::Num3 << endl;
 	cout << "Num9: " << Keyboard::Num9 << endl;
 	cout << "Numpad3: " << Keyboard::Numpad3 << endl;
@@ -110,6 +111,7 @@ int main()
 	cout << "Num9 - 26: " << Keyboard::Num9 - 26 << endl;
 	cout << "Numpad3 - 75: " << Keyboard::Numpad3 - 75 << endl;
 	cout << "Numpad9 - 75: " << Keyboard::Numpad9 - 75 << endl;
+	*/
 
 	while (verticesPromptWindow.isOpen())
 	{
