@@ -9,6 +9,15 @@
 using namespace sf;
 using namespace std;
 
+bool inputVerticesIsInRange();
+int keyCodeToVertices(int kc);
+double getRatio(int nVertices);
+void generatePoints(vector<Vector2f>& pointsVec, vector<Vector2f> verticesVec, int nVertices, double ratio);
+RectangleShape basicRectShape(int w, int h, Color c);
+void drawVerticesAndPoints(RenderWindow& window, vector<Vector2f> verticesVec, vector<Vector2f> pointsVec);
+void handleFirstWindow(Text& verticesPromptText, unsigned int& numVertices, double& ratio);
+void handleSecondWindow(Text& mainText, Text& iterText, unsigned int& timesClicked, unsigned int& numVertices, double& ratio);
+
 bool inputVerticesIsInRange()
 {
 	return (
@@ -29,9 +38,27 @@ bool inputVerticesIsInRange()
 		);
 }
 
-double getRatio(int n)
+int keyCodeToVertices(int kc)
 {
-	switch (n)
+	// cout << "Key Pressed: " << event.key.code << endl;
+
+	if (kc >= 29 && kc <= 35) // if pressed Num3-Num9
+	{
+		return (kc - 26); // Offsets the keycode to get the correct number of Vertices
+	}
+	else if (kc >= 78 && kc <= 84) // if pressed Numpad3-Numpad9
+	{
+		return (kc - 75); // Offsets the keycode to get the correct number of Vertices
+	}
+	else
+	{
+		return -1; // For anything else, return -1
+	}
+}
+
+double getRatio(int nVertices)
+{
+	switch (nVertices)
 	{
 	case 3:
 	case 4:
@@ -58,64 +85,58 @@ double getRatio(int n)
 	}
 }
 
-int main()
+void generatePoints(vector<Vector2f>& pointsVec, vector<Vector2f> verticesVec, int nVertices, double ratio)
+{
+	/// Generate more point(s)
+	Vector2f new_point = Vector2f();
+	/// Select random vertex
+	Vector2f rand_vertex = verticesVec.at(rand() % nVertices);
+	/// Calculate midpoint between random vertex and the last point in the vector
+	new_point.x = rand_vertex.x + ((pointsVec.back().x - rand_vertex.x) * ratio);
+	new_point.y = rand_vertex.y + ((pointsVec.back().y - rand_vertex.y) * ratio);
+	/// Push back the newly generated coord.
+	pointsVec.push_back(new_point);
+}
+
+RectangleShape basicRectShape(int w, int h, Color c)
+{
+	RectangleShape rect(Vector2f(w, h));
+	rect.setFillColor(c);
+	return rect;
+}
+
+void drawVerticesAndPoints(RenderWindow& window, vector<Vector2f> verticesVec, vector<Vector2f> pointsVec)
+{
+	for (int i = 0; i < verticesVec.size(); i++)
+	{
+		RectangleShape rect = basicRectShape(5, 5, Color::White);
+		rect.setPosition(Vector2f(verticesVec[i].x, verticesVec[i].y));
+		window.draw(rect);
+	}
+
+	for (int i = 0; i < pointsVec.size(); i++)
+	{
+		RectangleShape rect = basicRectShape(1, 1, Color::White);
+		rect.setPosition(Vector2f(pointsVec[i].x, pointsVec[i].y));
+		window.draw(rect);
+	}
+}
+
+void handleFirstWindow(Text& verticesPromptText, unsigned int& numVertices, double& ratio)
 {
 	// Create a video mode object
 	VideoMode vm1(540, 270);
-	// Create and open a window for the vertices prompt window
+	// Create and open a gameWindow for the vertices prompt window
 	RenderWindow verticesPromptWindow(vm1, "Vertices Prompt", Style::Default);
-	
-	Font font;
 
-	if (!font.loadFromFile("SuperShiny-0v0rG.ttf"))
-	{
-		return -1;
-	}
-
-	vector<Vector2f> vertices;
-	vector<Vector2f> points;
-	
-	int unsigned timesClicked = 0;
-	int unsigned numVertices = 0;
-	double ratio = 0.0;
-
-	sf::Text verticesPrompt;
-	verticesPrompt.setFont(font);
-	verticesPrompt.setString("Number of Vertices:\nPress a number\nin range 3 to 9\n\nBy Armin and Daniel");
-	verticesPrompt.setCharacterSize(36);
-	verticesPrompt.setFillColor(sf::Color::Cyan);
-	verticesPrompt.setStyle(sf::Text::Regular);
-	verticesPrompt.setPosition(27, 27);
-
-	sf::Text text;
-	text.setFont(font);
-	text.setCharacterSize(48);
-	text.setFillColor(sf::Color::Cyan);
-	text.setStyle(sf::Text::Bold);
-	text.setPosition(120, 60);
-
-	sf::Text iterText;
-	iterText.setFont(font);
-	iterText.setString(to_string(points.size()));
-	iterText.setCharacterSize(32);
-	iterText.setFillColor(sf::Color::Cyan);
-	iterText.setStyle(sf::Text::Regular);
-	iterText.setPosition(32, 48);
-
-	/*
-	cout << "Num3: " << Keyboard::Num3 << endl;
-	cout << "Num9: " << Keyboard::Num9 << endl;
-	cout << "Numpad3: " << Keyboard::Numpad3 << endl;
-	cout << "Numpad9: " << Keyboard::Numpad9 << endl;
-	cout << "Num3 - 26: " << Keyboard::Num3 - 26 << endl;
-	cout << "Num9 - 26: " << Keyboard::Num9 - 26 << endl;
-	cout << "Numpad3 - 75: " << Keyboard::Numpad3 - 75 << endl;
-	cout << "Numpad9 - 75: " << Keyboard::Numpad9 - 75 << endl;
-	*/
-
+	// Loop while window is open
 	while (verticesPromptWindow.isOpen())
 	{
-		// Handle input
+		/*
+		****************************************
+		Handle the players input
+		****************************************
+		*/
 		Event event;
 		while (verticesPromptWindow.pollEvent(event))
 		{
@@ -126,45 +147,56 @@ int main()
 
 			if (event.type == Event::KeyPressed)
 			{
-				cout << "Key Pressed: " << event.key.code << endl;
-
 				if (inputVerticesIsInRange())
 				{
 					// Assign numVertices based on which number key was pressed
-					int key = event.key.code;
-					if (key >= 29 && key <= 35) // if pressed Num3-Num9
+					int keyCode = event.key.code;
+					numVertices = keyCodeToVertices(keyCode); // Equals to -1 if there was an error in the keyCodeToVertices function
+
+					if (numVertices == -1)
 					{
-						numVertices = event.key.code - 26; // Offsets the keycode to get the correct number of Vertices
+						std::cout << "Error on setting # of Vertices." << std::endl;
+						return;
 					}
-					else if (key >= 78 && key <= 84) // if pressed Numpad3-Numpad9
-					{
-						numVertices = event.key.code - 75; // Offsets the keycode to get the correct number of Vertices
-					}
-					
+
 					ratio = getRatio(numVertices); // Assign ratio based on number of Vertices
 
-					text.setString("Create your vertices by clicking\n" + to_string(numVertices) + " points in this windows");
 					verticesPromptWindow.close();
 				}
 			}
 		}
-		
+
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
 			verticesPromptWindow.close();
 		}
 
-		// Draw
-		verticesPromptWindow.draw(verticesPrompt);
+		/*
+		****************************************
+		Draw
+		****************************************
+		*/
+		verticesPromptWindow.draw(verticesPromptText);
 		verticesPromptWindow.display();
 	}
+}
+
+void handleSecondWindow(Text& mainText, Text& iterText, unsigned int& timesClicked, unsigned int& numVertices, double& ratio)
+{
+	// Declaring the vectors to hold vertices and points
+	vector<Vector2f> vertices;
+	vector<Vector2f> points;
+
+	// Set mainText's string to the correct value
+	mainText.setString("Create your vertices by clicking\n" + to_string(numVertices) + " points in this windows");
 
 	// Create a video mode object
 	VideoMode vm2(1080, 1080);
 	// Create and open a window for the game
-	RenderWindow window(vm2, "Chaos Game!! - By Armin and Daniel", Style::Default);
+	RenderWindow gameWindow(vm2, "Chaos Game!! - By Armin and Daniel", Style::Default);
 
-	while (window.isOpen())
+	// Loop while window is open
+	while (gameWindow.isOpen())
 	{
 		/*
 		****************************************
@@ -172,15 +204,15 @@ int main()
 		****************************************
 		*/
 		Event event;
-		while (window.pollEvent(event))
+		while (gameWindow.pollEvent(event))
 		{
-		    if (event.type == Event::Closed)
-		    {
-					// Quit the game when the window is closed
-					window.close();
-		    }
-		    if (event.type == sf::Event::MouseButtonPressed)
-		    {
+			if (event.type == Event::Closed)
+			{
+				// Quit the game when the game's window is closed
+				gameWindow.close();
+			}
+			if (event.type == sf::Event::MouseButtonPressed)
+			{
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
 					std::cout << "the left button was pressed" << std::endl;
@@ -191,43 +223,35 @@ int main()
 
 					if (timesClicked == numVertices)
 					{
-						text.setString("Click on a " + to_string(numVertices + 1) + "th point\nto start the algorithm");
+						mainText.setString("Click on a " + to_string(numVertices + 1) + "th point\nto start the algorithm");
 					}
 
-					if(vertices.size() < numVertices)
+					if (vertices.size() < numVertices)
 					{
 						vertices.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
 					}
-					else if(points.size() == 0)
+					else if (points.size() == 0)
 					{
-					///fourth click
-					///push back to points vector
+						///fourth click
+						///push back to points vector
 						points.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
 					}
 				}
-		    }
+			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
-			window.close();
+			gameWindow.close();
 		}
 		/*
 		****************************************
 		Update
 		****************************************
 		*/
-	
+
 		if (points.size() > 0)
 		{
-			/// Generate more point(s)
-			Vector2f new_point = Vector2f();
-			/// Select random vertex
-			Vector2f rand_vertex = vertices.at(rand() % numVertices);
-			/// Calculate midpoint between random vertex and the last point in the vector
-			new_point.x = rand_vertex.x + ((points.back().x - rand_vertex.x) * ratio);
-			new_point.y = rand_vertex.y + ((points.back().y - rand_vertex.y) * ratio);
-			/// Push back the newly generated coord.
-			points.push_back(new_point);
+			generatePoints(points, vertices, numVertices, ratio);
 		}
 
 		/*
@@ -235,33 +259,80 @@ int main()
 		Draw
 		****************************************
 		*/
-		window.clear();
+		gameWindow.clear();
+
 		if (timesClicked == 0 || timesClicked == numVertices) {
-			
-			window.draw(text);
+
+			gameWindow.draw(mainText);
 		}
 		else if (timesClicked > numVertices)
 		{
 			iterText.setString(to_string(points.size()));
-			window.draw(iterText);
+			gameWindow.draw(iterText);
 		}
 
-		for(int i = 0; i < vertices.size(); i++)
-		{
-		    RectangleShape rect(Vector2f(5,5));
-		    rect.setPosition(Vector2f(vertices[i].x, vertices[i].y));
-		    rect.setFillColor(Color::White);
-		    window.draw(rect);
-		}
+		drawVerticesAndPoints(gameWindow, vertices, points);
 
-		for (int i = 0; i < points.size(); i++)
-		{
-			RectangleShape dot(Vector2f(1, 1));
-			dot.setPosition(Vector2f(points[i].x, points[i].y));
-			dot.setFillColor(Color::White);
-			window.draw(dot);
-		}
-
-		window.display();
+		gameWindow.display();
 	}
+}
+
+int main()
+{
+	// Declaring and initializing variables
+	// needed for conditions and calculations
+	unsigned int timesClicked = 0;
+	unsigned int numVertices = 0;
+	double ratio = 0.5;
+
+	/*
+	****************************************
+	Set the font and text properties
+	****************************************
+	*/
+
+	// For the font used for all texts
+	string fontName = "SuperShiny-0v0rG.ttf";
+	Font font;
+
+	if (!font.loadFromFile(fontName))
+	{
+		return -1;
+	}
+
+	// For the first window's prompt
+	sf::Text verticesPromptText;
+	verticesPromptText.setFont(font);
+	verticesPromptText.setString("Number of Vertices:\nPress a number\nin range 3 to 9\n\nBy Armin and Daniel");
+	verticesPromptText.setCharacterSize(40);
+	verticesPromptText.setFillColor(sf::Color::Cyan);
+	verticesPromptText.setStyle(sf::Text::Style::Regular);
+	verticesPromptText.setPosition(20, 20);
+
+	// For the second window's main text
+	sf::Text mainText;
+	mainText.setFont(font);
+	mainText.setString("");
+	mainText.setCharacterSize(48);
+	mainText.setFillColor(sf::Color::Cyan);
+	mainText.setStyle(sf::Text::Style::Bold);
+	mainText.setPosition(120, 60);
+
+	// For the second window's # of iterations text
+	sf::Text iterText;
+	iterText.setFont(font);
+	iterText.setString("0");
+	iterText.setCharacterSize(32);
+	iterText.setFillColor(sf::Color::Cyan);
+	iterText.setStyle(sf::Text::Style::Regular);
+	iterText.setPosition(32, 48);
+
+	// Handle first window (# of vertices prompt window)
+	handleFirstWindow(verticesPromptText, numVertices, ratio);
+
+	// Check if numVertices was set incorrectly. If so, terminate the program.
+	if (numVertices == -1) { return -1; }
+
+	// Handle second window (game's window)
+	handleSecondWindow(mainText, iterText, timesClicked, numVertices, ratio);
 }
